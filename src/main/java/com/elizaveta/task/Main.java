@@ -81,7 +81,7 @@ public class Main extends HttpServlet {
                         return;
                     case MAIL:
                         final String username = "lizap@bk.ru";
-                        final String password = "";
+                        final String password = "secret";
                         Properties props = System.getProperties();
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.smtp.starttls.enable", "true");
