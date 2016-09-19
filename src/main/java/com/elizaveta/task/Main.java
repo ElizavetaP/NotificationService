@@ -30,7 +30,7 @@ public class Main extends HttpServlet {
     private static final String SMTP_PORT = "465";
     private static final String USER_NAME = "lizap@bk.ru";
     private static final String PASSWORD = "secret";
-    ScheduledThreadPoolExecutor manager;
+    private ScheduledThreadPoolExecutor manager;
 
     public Main() {
         super();
