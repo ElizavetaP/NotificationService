@@ -4,6 +4,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @WebServlet(urlPatterns = {"/"})
 public class Main extends HttpServlet {
-
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
     ScheduledThreadPoolExecutor manager;
 
     public Main() {
@@ -72,8 +73,10 @@ public class Main extends HttpServlet {
                                     + httpResponse.getStatusLine().getStatusCode());
                             httpResponse.close();
                             httpClient.close();
+                            LOG.info("command externalId = " + externalId + " is sent");
                         } catch (IOException e) {
                             e.printStackTrace();
+                            LOG.warn( "command externalId = " + externalId + " is not sent" );
                         }
                         return;
                     case MAIL:
@@ -102,9 +105,10 @@ public class Main extends HttpServlet {
                             outmessage.setText("externalId = " + externalId
                                      + "\n message = " + message);
                             Transport.send(outmessage);
-                            System.out.println("Sent message successfully....");
+                            LOG.info("command externalId = " + externalId + " is sent");
                         } catch (MessagingException mex) {
                             mex.printStackTrace();
+                            LOG.warn( "command externalId = " + externalId + " is not sent" );
                         }
                 }
             } catch (Throwable e) {
