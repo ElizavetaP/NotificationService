@@ -56,6 +56,11 @@ public class Main extends HttpServlet {
         }
         String extraParams = req.getParameter("extraParams");
         String stringType = req.getParameter("NotificationType");
+        if (externalId == null || message == null || time == null ||
+                extraParams == null || stringType == null) {
+            LOG.warn("empty parameter");
+            return;
+        }
         NotificationType type;
         if (stringType.toLowerCase().equals("mail")) {
             type = NotificationType.MAIL;
