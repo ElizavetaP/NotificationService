@@ -26,6 +26,10 @@ import java.util.concurrent.TimeUnit;
 @WebServlet(urlPatterns = {"/"})
 public class Main extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
+    private static final String SMTP_HOST = "smtp.mail.ru";
+    private static final String SMTP_PORT = "465";
+    private static final String USER_NAME = "lizap@bk.ru";
+    private static final String PASSWORD = "secret";
     ScheduledThreadPoolExecutor manager;
 
     public Main() {
@@ -39,7 +43,7 @@ public class Main extends HttpServlet {
         String externalId = req.getParameter("externalId");
         String message = req.getParameter("message");
         String stringDate = req.getParameter("time");
-        if(stringDate==null){
+        if (stringDate == null) {
             System.out.println("null");
             return;
         }
@@ -76,39 +80,38 @@ public class Main extends HttpServlet {
                             LOG.info("command externalId = " + externalId + " is sent");
                         } catch (IOException e) {
                             e.printStackTrace();
-                            LOG.warn( "command externalId = " + externalId + " is not sent" );
+                            LOG.warn("command externalId = " + externalId + " is not sent");
                         }
                         return;
                     case MAIL:
-                        final String username = "lizap@bk.ru";
-                        final String password = "secret";
+
                         Properties props = System.getProperties();
                         props.put("mail.smtp.auth", "true");
                         props.put("mail.smtp.starttls.enable", "true");
-                        props.put("mail.smtp.host", "smtp.mail.ru");
-                        props.put("mail.smtp.port", "465");
-                        props.put("mail.smtp.socketFactory.port", "465");
+                        props.put("mail.smtp.host", SMTP_HOST);
+                        props.put("mail.smtp.port", SMTP_PORT);
+                        props.put("mail.smtp.socketFactory.port", SMTP_PORT);
                         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
                         props.put("mail.smtp.socketFactory.fallback", "false");
                         Session session = Session.getDefaultInstance(props,
                                 new javax.mail.Authenticator() {
                                     protected PasswordAuthentication getPasswordAuthentication() {
-                                        return new PasswordAuthentication(username, password);
+                                        return new PasswordAuthentication(USER_NAME, PASSWORD);
                                     }
                                 });
                         try {
                             Message outmessage = new MimeMessage(session);
-                            outmessage.setFrom(new InternetAddress("lizap@bk.ru"));
+                            outmessage.setFrom(new InternetAddress(USER_NAME));
                             outmessage.setRecipients(Message.RecipientType.TO,
                                     InternetAddress.parse(extraParams));
                             outmessage.setSubject("Testing Subject");
                             outmessage.setText("externalId = " + externalId
-                                     + "\n message = " + message);
+                                    + "\n message = " + message);
                             Transport.send(outmessage);
                             LOG.info("command externalId = " + externalId + " is sent");
                         } catch (MessagingException mex) {
                             mex.printStackTrace();
-                            LOG.warn( "command externalId = " + externalId + " is not sent" );
+                            LOG.warn("command externalId = " + externalId + " is not sent");
                         }
                 }
             } catch (Throwable e) {
