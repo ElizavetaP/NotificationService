@@ -8,4 +8,4 @@
 
     'http://localhost:8080/?externalId=12&message=qwerty&time=2016.09.18at16:43:30&extraParams=lizap@bk.ru&NotificationType=mail'
 
-    'http://localhost:8080/?externalId=12&message=qwerty&time=2016.09.18at16:43:30&extraParams=localhost:8888&NotificationType=http'
+    'http://localhost:8080/?externalId=12&message=qwerty&time=2016.09.18at16:43:30&extraParams=localhost:8080&NotificationType=http'
